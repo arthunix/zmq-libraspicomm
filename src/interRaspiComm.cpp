@@ -84,7 +84,7 @@ void RaspiComm::initService(char *endpointIp, unsigned int port=DEFAULT_ZSOCKET_
     }
 }
 
-void RaspiComm::initService(RaspiComm::msgStruct *firstMsg, char *endpointIp, unsigned int port=DEFAULT_ZSOCKET_PORT) {
+void RaspiComm::initService(RaspiComm::msgStruct firstMsg, char *endpointIp, unsigned int port=DEFAULT_ZSOCKET_PORT) {
     this->setStructVal(firstMsg);
 
     if (this->endType == RaspiComm::IMG_PROCESSING) {
@@ -144,4 +144,16 @@ void RaspiComm::hangingZmqThread(RaspiComm::msgStruct *msg) {
             this->logger.info("msg sent to requester");
         }
     }
+}
+
+RaspiComm::msgStruct getStruct() {
+    this->checkCommEndType(RaspiComm::CONTROL);
+    char *buffer[sizeof(RaspiCom::msgStruct)] = {0};
+    zstr_send(requester, DEAFULT_REQ_MSG);
+    char *buffer = zstr_recv(requester);
+
+    RaspiComm::msgStruct rcvdMsg;
+    memcpy(rcvdMsg, buffer, sizeof(RaspiComm::msgStruct));
+
+    return rcvdMsg;
 }

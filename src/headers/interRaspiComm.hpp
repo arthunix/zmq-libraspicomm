@@ -11,6 +11,7 @@
 #define DEFAULT_ZSOCKET_PORT                             5555;
 #define DEFAULT_CONN_PROTOCOL                           "tcp";
 #define ENDPOINT_STR_MAX_LEN                              100;
+#define DEAFULT_REQ_MSG                                   "R";
 
 
 class RaspiComm {
@@ -41,8 +42,8 @@ public:
 
     void setStructVal(RaspiComm::msgStruct msg);
     void initService(char *endpointIp, unsigned int port);
-    void initService(RaspiComm::msgStruct *firstMsg, unsigned int port);
-    msgStruct getStruct();
+    void initService(RaspiComm::msgStruct firstMsg, unsigned int port);
+    RaspiComm::msgStruct getStruct();
 
 };
 
