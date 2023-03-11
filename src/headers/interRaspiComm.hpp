@@ -8,22 +8,28 @@
 #include "utils.hpp"
 
 
-#define DEFAULT_ZSOCKET_PORT                             5555;
-#define DEFAULT_CONN_PROTOCOL                           "tcp";
-#define ENDPOINT_STR_MAX_LEN                              100;
-#define DEAFULT_REQ_MSG                                   "R";
+#define DEFAULT_ZSOCKET_PORT                             5555
+#define DEFAULT_CONN_PROTOCOL                           "tcp"
+#define ENDPOINT_STR_MAX_LEN                              100
+#define DEAFULT_REQ_MSG                                   "R"
 
 
 class RaspiComm {
-    enum CommType : unsigned short {CONTROL = 0, IMG_PROCESSING};
-
+public:
     struct msgStruct {
         float ang;
         float dist;
         float c;
         float d;
     };
+    enum CommType : unsigned short {CONTROL = 0, IMG_PROCESSING};
+    RaspiComm(unsigned short endType);
+    ~RaspiComm();
 
+    void setStructVal(RaspiComm::msgStruct msg);
+    void initService(char *endpointIp, unsigned int port);
+    void initService(RaspiComm::msgStruct firstMsg, char *endpointIp, unsigned int port);
+    RaspiComm::msgStruct getStruct();
 
 private:
     utils::Logger logger;
@@ -31,19 +37,12 @@ private:
     msgStruct *sharedThreadStruct;
     std::string endpointIp;
     zsock_t *requester;
-    void *responder;
+    zsock_t *responder;
 
-    void hangingZmqThread(RaspiComm::msgStruct *msg);
+    // static void hangingZmqThread(RaspiComm::msgStruct *msg, zsock_t *responder, utils::Logger logger);
+    static void hangingZmqThread(RaspiComm::msgStruct *msg);
     void checkCommEndType(unsigned short neededEndType);
 
-public:
-    RaspiComm(unsigned short endType);
-    ~RaspiComm();
-
-    void setStructVal(RaspiComm::msgStruct msg);
-    void initService(char *endpointIp, unsigned int port);
-    void initService(RaspiComm::msgStruct firstMsg, unsigned int port);
-    RaspiComm::msgStruct getStruct();
 
 };
 

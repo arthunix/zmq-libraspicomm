@@ -10,10 +10,8 @@ int main(int argc, char const *argv[]) {
     comm.initService("localhost");
 
     while (true) {
-        printf("sent data.ang=%.2f\n", data.ang);
-        data.ang = rand() % 45;
-
         data = comm.getStruct();
+        printf("got data.ang=%.2f\n", data.ang);
     }
 
     return 0;
