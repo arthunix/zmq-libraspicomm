@@ -1,10 +1,2 @@
-all:
-
-controll: controll.cpp
-	g++ controll.cpp -o controll -lzmq
-
-img_processing: img_processing.cpp
-	g++ img_processing.cpp -o img_processing -lzmq
-
-clean:
-	rm controll img_processing
+all: main.cpp interRaspiComm.cpp
+	g++ main.cpp interRaspiComm.cpp -lzmq -pthread

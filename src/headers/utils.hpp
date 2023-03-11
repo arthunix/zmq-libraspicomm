@@ -136,22 +136,22 @@ namespace utils {
 
         template<typename... Args>
         void _appendToFile(const char* priorityStr, const char* message, Args... args) {
-            std::ofstream logFile;
-            FILE* pFile;
-
-            const char* loggingPath;
-            if (Logger::DEBUG)
-                loggingPath = this->_logFilePath;
-
-            pFile = fopen((const char*) loggingPath, "a+");
-
-            std::fprintf(pFile, "[%s] - %s - %s - ", priorityStr, this->_prefix, currentDateTime().c_str());
-
-            std::fprintf(pFile, message, args...);
-
-            std::fprintf(pFile, ";\n");
-
-            fclose(pFile);
+            // std::ofstream logFile;
+            // FILE* pFile;
+            //
+            // const char* loggingPath;
+            // if (Logger::DEBUG)
+            //     loggingPath = this->_logFilePath;
+            //
+            // pFile = fopen((const char*) loggingPath, "a+");
+            //
+            // std::fprintf(pFile, "[%s] - %s - %s - ", priorityStr, this->_prefix, currentDateTime().c_str());
+            //
+            // std::fprintf(pFile, message, args...);
+            //
+            // std::fprintf(pFile, ";\n");
+            //
+            // fclose(pFile);
         }
 
     public:

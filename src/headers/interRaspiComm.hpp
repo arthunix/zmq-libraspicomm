@@ -3,7 +3,7 @@
 
 #include <thread>
 
-#include <czmq.h>
+#include <zmq.hpp>
 
 #include "utils.hpp"
 
@@ -26,9 +26,9 @@ public:
     RaspiComm(unsigned short endType);
     ~RaspiComm();
 
-    void setStructVal(RaspiComm::msgStruct msg);
-    void initService(char *endpointIp, unsigned int port);
-    void initService(RaspiComm::msgStruct firstMsg, char *endpointIp, unsigned int port);
+    void setStructVal(RaspiComm::msgStruct &msg);
+    void initService(const char *endpointIp, unsigned int port);
+    void initService(RaspiComm::msgStruct &firstMsg, const char *endpointIp, unsigned int port);
     RaspiComm::msgStruct getStruct();
 
 private:
@@ -36,11 +36,11 @@ private:
     unsigned short endType;
     msgStruct *sharedThreadStruct;
     std::string endpointIp;
-    zsock_t *requester;
-    zsock_t *responder;
+    zmq::socket_t requester;
+    zmq::socket_t responder;
 
-    // static void hangingZmqThread(RaspiComm::msgStruct *msg, zsock_t *responder, utils::Logger logger);
-    static void hangingZmqThread(RaspiComm::msgStruct *msg);
+    static void hangingZmqThread(RaspiComm::msgStruct *msg, zmq::socket_t *responder);
+    // static void hangingZmqThread(RaspiComm::msgStruct *msg);
     void checkCommEndType(unsigned short neededEndType);
 
 

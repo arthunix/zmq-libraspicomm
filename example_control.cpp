@@ -7,7 +7,7 @@ int main(int argc, char const *argv[]) {
 
     RaspiComm comm = RaspiComm(RaspiComm::CONTROL);
 
-    comm.initService("localhost");
+    comm.initService((const char *) "localhost", (unsigned int) 5556);
 
     while (true) {
         data = comm.getStruct();
