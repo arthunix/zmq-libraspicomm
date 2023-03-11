@@ -84,6 +84,50 @@ void RaspiComm::initService(char *endpointIp, unsigned int port=DEFAULT_ZSOCKET_
     }
 }
 
+void RaspiComm::initService(RaspiComm::msgStruct *firstMsg, char *endpointIp, unsigned int port=DEFAULT_ZSOCKET_PORT) {
+    this->setStructVal(firstMsg);
+
+    if (this->endType == RaspiComm::IMG_PROCESSING) {
+        this->checkCommEndType(RaspiComm::IMG_PROCESSING);
+        this->logger.info("initService called - IMG_PROCESSING - REP");
+
+        this->responder = zsock_new(ZMQ_REP);
+        std::string endpoint;
+        sprintf(
+            endpoint,
+            "%s://*:%d",
+            DEFAULT_CONN_PROTOCOL,
+            port
+        );
+        int rc = zsock_bind(responder, endpoint);
+        if (rc != port) {
+            this->logger.error("Could not bind to port %d", port);
+            throw std::exception();
+        }
+
+    } else if (this->endType == RaspiComm::CONTROL) {
+        this->checkCommEndType(RaspiComm::CONTROL);
+        this->logger.info("initService called - CONTROL - REQ");
+
+        this->requester = zsock_new(ZMQ_REQ);
+        // char *endpoint[ENDPOINT_STR_MAX_LEN] = {0};
+        std::string endpoint;
+        sprintf(
+            endpoint,
+            "%s://%s:%d",
+            DEFAULT_CONN_PROTOCOL,
+            endpointIp,
+            port
+        );
+        zsock_connect(requester, endpoint.c_str());
+
+        std::thread zmq_thread(
+            this->hangingZmqThread,
+            &this->sharedThreadStruct
+        );
+    }
+}
+
 void RaspiComm::hangingZmqThread(RaspiComm::msgStruct *msg) {
     this->checkCommEndType(RaspiComm::IMG_PROCESSING);
     this->logger.info("initializing zmqThread");
@@ -97,6 +141,7 @@ void RaspiComm::hangingZmqThread(RaspiComm::msgStruct *msg) {
         if (ready) {
             memcpy(buffer, &msg, sizeof(RaspiComm::msgStruct));
             zmq_send(responder, buffer, sizeof(RaspiComm::msgStruct), 0);
+            this->logger.info("msg sent to requester");
         }
     }
 }

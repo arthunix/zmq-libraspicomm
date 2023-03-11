@@ -41,7 +41,7 @@ public:
 
     void setStructVal(RaspiComm::msgStruct msg);
     void initService(char *endpointIp, unsigned int port);
-    void initService(RaspiComm::msgStruct *msg, unsigned int port);
+    void initService(RaspiComm::msgStruct *firstMsg, unsigned int port);
     msgStruct getStruct();
 
 };
