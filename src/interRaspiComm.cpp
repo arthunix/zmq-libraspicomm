@@ -48,8 +48,8 @@ void RaspiComm::initService(const char *endpointIp, unsigned int port=DEFAULT_ZS
         this->checkCommEndType(RaspiComm::IMG_PROCESSING);
         this->logger.info("initService called - IMG_PROCESSING - REP");
 
-        zmq::context_t context(2);
-        this->responder = (zmq::socket_t) socket(context, zmq::socket_type::rep);
+        zmq::context_t context = zmq::context_t(2);
+        zmq::socket_t this->responder(context, zmq::socket_type::rep);
         char endpoint[ENDPOINT_STR_MAX_LEN] = {0};
         sprintf(
             endpoint,
@@ -64,7 +64,7 @@ void RaspiComm::initService(const char *endpointIp, unsigned int port=DEFAULT_ZS
         this->logger.info("initService called - CONTROL - REQ");
 
         zmq::context_t context(1);
-        this->requester = (zmq::socket_t) socket(context, zmq::socket_type::req);
+        zmq::socket_t this->requester(context, zmq::socket_type::req);
         // char *endpoint[ENDPOINT_STR_MAX_LEN] = {0};
         char endpoint[ENDPOINT_STR_MAX_LEN] = {0};
         sprintf(
