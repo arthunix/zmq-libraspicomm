@@ -26,14 +26,17 @@ make
 ```
 
 #### Example of Code:
+
 ```C++
+// Control RasPi
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include "headers/comms_control.hpp"
 
-#define COMMS_DEBUG 1
+#define COMMS_LOG           1 # create logs
+#define COMMS_DEBUG         1 # log to stdout
 
 int main (int argc, char const *argv[])
 {
@@ -51,12 +54,14 @@ int main (int argc, char const *argv[])
 ```
 
 ```C++
+// Img Processing
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
 #include "headers/comms_img.hpp"
 
-#define COMMS_DEBUG 1
+#define COMMS_LOG           1 # create logs
+#define COMMS_DEBUG         1 # log to stdout
 
 int main (int argc, char const *argv[])
 {
