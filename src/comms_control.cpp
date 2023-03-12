@@ -14,7 +14,7 @@ namespace comms {
     zmq::socket_t global_socket(context, zmq::socket_type::req);
 
     void initComms(char *ip, unsigned port) {
-        log("[initComms] called");
+        // log("[initComms] called");
 
         std::ostringstream oss;
         oss << "tcp://" << ip << ":" << port;
@@ -26,15 +26,15 @@ namespace comms {
     }
 
     msgStruct getData() {
-        log("[getData] called");
+        // log("[getData] called");
         char req[2] = {'R', '\0'};
-        log("[getData] sending '%s'", req);
+        // log("[getData] sending '%s'", req);
         global_socket.send(req, (size_t) 1, 0);
 
         char *buff = new char[sizeof(msgStruct)];
-        log("[getData] waiting for %u bytes", sizeof(msgStruct));
+        // log("[getData] waiting for %u bytes", sizeof(msgStruct));
         global_socket.recv(buff, sizeof(msgStruct), 0);
-        log("[getData] rcvd %u bytes", sizeof(msgStruct));
+        // log("[getData] rcvd %u bytes", sizeof(msgStruct));
         msgStruct *msg = new msgStruct;
         memcpy(msg, buff, sizeof(msgStruct));
 

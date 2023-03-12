@@ -9,9 +9,6 @@
 #include <cstdio>
 #include <fstream>
 
-// #ifndef COMMS_DEBUG
-// #define COMMS_DEBUG 0
-// #endif
 
 namespace comms {
     struct msgStruct {
