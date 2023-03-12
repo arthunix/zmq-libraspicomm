@@ -7,13 +7,27 @@
 #include <string.h>
 #include <fstream>
 #include <time.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <chrono>
+
+#include <sstream>
 
 
 namespace utils {
 
-    const float PI = 3.141592f;
+    const std::string currentDateTime() {
+        // Get current date/time, format is YYYY-MM-DD.HH-mm-ss
 
-    const std::string currentDateTime();
+        auto t = std::time(nullptr);
+        auto tm = *std::localtime(&t);
+
+        std::ostringstream oss;
+        oss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
+        auto str = oss.str();
+
+        return str;
+    }
 
     template <typename T>
     T modulus(T val) {
@@ -21,108 +35,6 @@ namespace utils {
             return val;
         return -val;
     }
-
-    bool fileExists(const std::string& filePath);
-
-    int ourDistribution(int min, int max);
-
-    template <typename T = char*>
-    void _insert_color(char* original, unsigned int pos, T new_insertion) {
-        for (size_t i = 0; i < 6; i++)
-            original[i + pos] = new_insertion[i + pos];
-    }
-
-    template <typename T>
-    void swap(T& a, T& b) {
-        T tmp = a;
-        a = b;
-        b = tmp;
-    }
-
-    template <typename T>
-    class Queue {
-        static const unsigned short int _ALLOC_BLOCK_SIZE = 5;
-    private:
-        T* _items;
-        int _nEntriesAmmount;
-        int _nCurrentSize;
-
-        void _shiftBack();
-        bool _allocNewBlock();
-        bool _full();
-
-    public:
-        Queue();
-        ~Queue();
-
-        bool push(T element);
-        bool pop(T& element);
-        bool empty();
-    };
-
-    template <typename T>
-    Queue<T>::Queue() {
-        this->_items = new T[Queue::_ALLOC_BLOCK_SIZE];
-        this->_nCurrentSize = Queue::_ALLOC_BLOCK_SIZE;
-        this->_nEntriesAmmount = 0;
-    }
-
-    template <typename T>
-    Queue<T>::~Queue() {
-        delete[] this->_items;
-    }
-
-    template <typename T>
-    bool Queue<T>::_allocNewBlock() {
-        this->_nCurrentSize += Queue::_ALLOC_BLOCK_SIZE;
-        this->_items = (T*) realloc(this->_items, this->_nCurrentSize);
-
-        return this->_items != NULL;
-    }
-
-    template <typename T>
-    void Queue<T>::_shiftBack() {
-        for (size_t i = 0; i < this->_nEntriesAmmount; i++)
-            this->_items[i] = this->_items[i+1];
-
-        this->_nEntriesAmmount--;
-    }
-
-    template <typename T>
-    bool Queue<T>::push(T element) {
-
-        if (this->_full())
-            if (!this->_allocNewBlock())
-                exit(1);
-
-        this->_items[this->_nEntriesAmmount++] = element;
-        return true;
-    }
-
-    template <typename T>
-    bool Queue<T>::pop(T& element) {
-
-        if (!this->empty()) {
-            element = this->_items[0];
-            this->_shiftBack();
-
-            return true;
-        }
-
-        return false;
-    }
-
-    template <typename T>
-    bool Queue<T>::empty() {
-        return this->_nEntriesAmmount == 0;
-    }
-
-    template <typename T>
-    bool Queue<T>::_full() {
-        return this->_nEntriesAmmount == this->_nCurrentSize;
-    }
-
-
 
     class Logger {
     public:
@@ -136,22 +48,27 @@ namespace utils {
 
         template<typename... Args>
         void _appendToFile(const char* priorityStr, const char* message, Args... args) {
-            // std::ofstream logFile;
-            // FILE* pFile;
-            //
-            // const char* loggingPath;
-            // if (Logger::DEBUG)
-            //     loggingPath = this->_logFilePath;
-            //
-            // pFile = fopen((const char*) loggingPath, "a+");
-            //
-            // std::fprintf(pFile, "[%s] - %s - %s - ", priorityStr, this->_prefix, currentDateTime().c_str());
-            //
-            // std::fprintf(pFile, message, args...);
-            //
-            // std::fprintf(pFile, ";\n");
-            //
-            // fclose(pFile);
+            std::ofstream logFile;
+            FILE* pFile;
+
+            const char* loggingPath;
+            loggingPath = this->_logFilePath;
+
+            pFile = fopen((const char*) loggingPath, "a+");
+
+            std::fprintf(pFile, "[%s] - %s - %s - ", priorityStr, this->_prefix, currentDateTime().c_str());
+
+            std::fprintf(pFile, message, args...);
+
+            std::fprintf(pFile, ";\n");
+
+            fclose(pFile);
+
+            if (DEBUG) {
+                printf("[%s] - %s - %s - ", priorityStr, this->_prefix, currentDateTime().c_str());
+                printf(message, args...);
+                printf(";\n");
+            }
         }
 
     public:

@@ -16,13 +16,15 @@ namespace comms {
 
     zmq::context_t context(1);
     zmq::socket_t global_socket(context, zmq::socket_type::rep);
+    utils::Logger comms_logger("ImgComms", "ImgComms.log", utils::Logger::Info);
 
     msgStruct *getMsgStructRef() {
+        comms_logger.info("[getMsgStructRef] called");
         return global_bss_struct;
     }
 
     void repThread() {
-        std::cout << "listener thread init" << '\n';
+        comms_logger.info("[repThread] listener thread initialized");
         char ready[1] = {0};
         char *buffer = new char[sizeof(msgStruct)];
 
@@ -30,7 +32,9 @@ namespace comms {
 
         while (true) {
             ready[0] = '\0';
+            comms_logger.info("[repThread] waiting for 1 byte");
             global_socket.recv(ready, (size_t) 1, 0);
+            comms_logger.info("[repThread] rcvd 1 byte");
             if (ready) {
                 memcpy(buffer, data_struct, sizeof(msgStruct));
                 global_socket.send(buffer, sizeof(msgStruct), 0);

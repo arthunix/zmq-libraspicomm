@@ -32,10 +32,10 @@ WDELOBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)\\%.o)
 all: comms_control comms_img
 
 comms_control: $(SRCDIR)/comms_control.cpp
-	$(CPP) $(CXXFLAGS) $(SRCDIR)/example_img.cpp -o $(OBJDIR)/example_img.o -c
+	$(CPP) $(CXXFLAGS) $(SRCDIR)/comms_control.cpp -o $(OBJDIR)/comms_control.o -c
 
 comms_img: $(SRCDIR)/comms_img.cpp
-	$(CPP) $(CXXFLAGS) $(SRCDIR)/example_control.cpp -o $(OBJDIR)/example_control.o -c
+	$(CPP) $(CXXFLAGS) $(SRCDIR)/comms_img.cpp -o $(OBJDIR)/comms_img.o -c
 
 install:
 	sudo cp src/headers/* /usr/include
