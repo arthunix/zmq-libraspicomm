@@ -43,7 +43,6 @@ comms_img: $(SRCDIR)/comms_img.cpp
 libraspicomm: $(OBJDIR)/comms_img.o $(OBJDIR)/comms_control.o
 	mkdir -p $(LIBDIR)
 	ar -rsv $(LIBDIR)/libraspicomm.a $(OBJDIR)/comms_img.o $(OBJDIR)/comms_control.o
-#	g++ $(CXXFLAGS) $(LDFLAGS) -shared -o $(LIBDIR)/libraspicomm.so $(OBJDIR)/comms_img.o $(OBJDIR)/comms_control.o
 
 install:
 	sudo cp lib/* /usr/local/lib
