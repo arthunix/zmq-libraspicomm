@@ -1,5 +1,5 @@
 CC = g++
-CXXFLAGS = -std=c++17 -Wall -static-libstdc++ -static-libgcc -Wwrite-strings -g -lm -lzmq -pthread
+CXXFLAGS = -std=c++17 -static-libstdc++ -static-libgcc -g -w -lm -lzmq -pthread
 
 all: examples
 

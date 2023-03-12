@@ -6,8 +6,10 @@
 #include <pthread.h>
 #include <unistd.h>
 #include <thread>
+#include <sstream>
+#include <string>
 
-#include "headers/msg_struct.h"
+// #include "headers/msg_struct.h"
 #include "headers/comms_img.hpp"
 
 namespace comms {
@@ -16,15 +18,15 @@ namespace comms {
 
     zmq::context_t context(1);
     zmq::socket_t global_socket(context, zmq::socket_type::rep);
-    utils::Logger comms_logger("ImgComms", "ImgComms.log", utils::Logger::Info);
 
     msgStruct *getMsgStructRef() {
-        comms_logger.info("[getMsgStructRef] called");
+        log("[getMsgStructRef] called");
         return global_bss_struct;
     }
 
     void repThread() {
-        comms_logger.info("[repThread] listener thread initialized");
+        std::cout << "[INFO][repThread] listener thread initialized" << '\n';
+        log("[repThread] listener thread initialized");
         char ready[1] = {0};
         char *buffer = new char[sizeof(msgStruct)];
 
@@ -32,22 +34,33 @@ namespace comms {
 
         while (true) {
             ready[0] = '\0';
-            comms_logger.info("[repThread] waiting for 1 byte");
+            log("[repThread] waiting for 1 byte");
             global_socket.recv(ready, (size_t) 1, 0);
-            comms_logger.info("[repThread] rcvd 1 byte");
+            log("[repThread] rcvd 1 byte");
             if (ready) {
                 memcpy(buffer, data_struct, sizeof(msgStruct));
                 global_socket.send(buffer, sizeof(msgStruct), 0);
+            } else {
+                // comms_logger.warning("[repThread] rcvd 1 NULL byte");
             }
         }
     }
 
-    std::thread initService() {
-        global_socket.bind("tcp://*:5556");
+    std::thread initService(unsigned port) {
+        // comms_logger.warning("[initService] binding to %u", port);
+
+        std::ostringstream oss;
+        oss << "tcp://*:" << port;
+        auto str = oss.str();
+
+        log("[initComms] endpoint on: %s", str);
+        global_socket.bind(str.c_str());
+        // comms_logger.warning("[initService] bound to %u", port);
         std::thread zmq_thread(
             repThread
         );
         zmq_thread.detach();
+        // comms_logger.warning("[initService] thread detached");
         return zmq_thread;
         // pthread_t listener_thread;
         // pthread_create(&listener_thread, NULL, repThread, NULL);

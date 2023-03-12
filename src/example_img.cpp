@@ -3,13 +3,12 @@
 #include <string.h>
 #include "headers/comms_img.hpp"
 
-#define LOG_DEBUG 1
+#define COMMS_DEBUG 1
 
 int main (int argc, char const *argv[])
 {
 
-    // std::thread t = comms::initService();
-    std::thread t = comms::initService();
+    comms::initService(5556);
     comms::msgStruct *msg = new comms::msgStruct;
     msg = comms::getMsgStructRef();
     while (true) { // codigo de raspi img

@@ -14,12 +14,15 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "msg_struct.h"
+#include "msg_struct.hpp"
+// #include "utils.hpp"
 
 
 namespace comms {
 
-    void initComms();
+    // utils::Logger comms_logger = utils::Logger("ControlComms", "ControlComms.log", utils::Logger::Info);
+
+    void initComms(char *ip, unsigned port);
 
     msgStruct getData();
 
