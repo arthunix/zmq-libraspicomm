@@ -37,6 +37,8 @@ comms_control: $(SRCDIR)/comms_control.cpp
 comms_img: $(SRCDIR)/comms_img.cpp
 	$(CPP) $(CXXFLAGS) $(SRCDIR)/example_control.cpp -o $(OBJDIR)/example_control.o -c
 
+install:
+	sudo cp src/headers/* /usr/include
 
 # # Builds the app
 # $(APPNAME): $(OBJ)
