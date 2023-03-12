@@ -24,3 +24,50 @@ git clone git@github.com:LombardiDaniel/RaspiComms.git
 cd RaspiComms
 make
 ```
+
+#### Example of Code:
+```C++
+#include <iostream>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include "headers/comms_control.hpp"
+
+#define COMMS_DEBUG 1
+
+int main (int argc, char const *argv[])
+{
+
+    comms::initComms("localhost", 5556);
+    std::cout << "connected" << '\n';
+    while (true) {
+        comms::msgStruct msg = comms::getData();
+        std::cout << msg.ang << '\n';
+        sleep(1);
+    }
+
+    return 0;
+}
+```
+
+```C++
+#include <iostream>
+#include <stdio.h>
+#include <string.h>
+#include "headers/comms_img.hpp"
+
+#define COMMS_DEBUG 1
+
+int main (int argc, char const *argv[])
+{
+
+    comms::initService(5556);
+    comms::msgStruct *msg = new comms::msgStruct;
+    msg = comms::getMsgStructRef();
+    while (true) { // codigo de raspi img
+        msg->ang = 5.5;
+    }
+
+    return 0;
+}
+```
