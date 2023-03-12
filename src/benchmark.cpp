@@ -12,7 +12,7 @@ int main (int argc, char const *argv[])
 {
 
     int times[RUNS];
-    comms::initComms();
+    comms::initComms(5556);
     for (size_t i = 0; i < RUNS; i++) {
         auto start = std::chrono::high_resolution_clock::now();
             comms::msgStruct msg = comms::getData();
