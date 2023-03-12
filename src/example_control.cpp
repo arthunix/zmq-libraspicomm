@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include "headers/comms_control.hpp"
 
 #define RUNS 1000
