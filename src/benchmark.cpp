@@ -6,7 +6,7 @@
 
 #include "headers/comms_control.hpp"
 
-#define RUNS 1000
+#define RUNS                                            1000
 
 int main (int argc, char const *argv[])
 {
