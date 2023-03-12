@@ -8,18 +8,18 @@
 #include "utils.hpp"
 
 
-#define DEFAULT_ZSOCKET_PORT                             5555
+#define DEFAULT_ZSOCKET_PORT                             5556
 #define DEFAULT_CONN_PROTOCOL                           "tcp"
 #define ENDPOINT_STR_MAX_LEN                              100
 #define DEAFULT_REQ_MSG                                   "R"
 
-// zmq::socket_type CONTROL = zmq::socket_type::req;
-// zmq::socket_type IMG_PROCESSING = zmq::socket_type::rep;
+zmq::socket_type CONTROL = zmq::socket_type::req;
+zmq::socket_type IMG_PROCESSING = zmq::socket_type::rep;
 
 
 class RaspiComm {
 public:
-    enum RaspiEndType : unsigned short {CONTROL=0, IMG_PROCESSING};
+    // enum RaspiEndType : unsigned short {CONTROL=0, IMG_PROCESSING};
     struct msgStruct {
         float ang;
         float dist;
@@ -32,7 +32,7 @@ public:
     zmq::socket_t requester;
     zmq::socket_t responder;
 
-    RaspiComm(unsigned short endType);
+    RaspiComm(zmq::socket_type endType);
     ~RaspiComm();
 
     void setStructVal(RaspiComm::msgStruct &msg);
@@ -41,7 +41,7 @@ public:
     RaspiComm::msgStruct getStruct();
 
 private:
-    zmq::context_t context;
+    int sockfd;
     utils::Logger logger;
     unsigned short endType;
     msgStruct *sharedThreadStruct;

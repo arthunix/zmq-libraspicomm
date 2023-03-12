@@ -1,16 +1,69 @@
-all: example_control example_img interRaspiComm
+########################################################################
+####################### Makefile Template ##############################
+########################################################################
 
-example_control: example_control.cpp
-	g++ example_control.cpp -c -lzmq -pthread
+# Compiler settings - Can be customized.
+CC = g++
+CXXFLAGS = -std=c++17 -Wall -static-libstdc++ -static-libgcc -Wwrite-strings -g -lm -lczmq -lpthread
+LDFLAGS = --disable-stdcall-fixup
 
-example_img: example_img.cpp
-	g++ example_img.cpp -c -lzmq -pthread
+# Makefile settings - Can be customized.
+APPNAME = RaspiComms
+EXT = .cpp
+SRCDIR = src
+OBJDIR = obj
 
-interRaspiComm: src/interRaspiComm.cpp
-	g++ src/interRaspiComm.cpp -c -lzmq -pthread
+############## Do not change anything from here downwards! #############
+SRC = $(wildcard $(SRCDIR)/*$(EXT))
+OBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)/%.o)
+DEP = $(OBJ:$(OBJDIR)/%.o=%.d)
+# UNIX-based OS variables & settings
+RM = rm
+DELOBJ = $(OBJ)
+# Windows OS variables & settings
+DEL = del
+EXE = .exe
+WDELOBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)\\%.o)
 
-control: example_control.cpp src/interRaspiComm.cpp
-	g++ example_control.cpp src/interRaspiComm.cpp -o control.out -lzmq -pthread
+########################################################################
+####################### Targets beginning here #########################
+########################################################################
 
-img: example_img.cpp src/interRaspiComm.cpp
-	g++ example_img.cpp src/interRaspiComm.cpp -o img.out -lzmq -pthread
+all: $(APPNAME)
+
+# Builds the app
+$(APPNAME): $(OBJ)
+	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+
+# Creates the dependecy rules
+%.d: $(SRCDIR)/%$(EXT)
+	@$(CPP) $(CFLAGS) $< -MM -MT $(@:%.d=$(OBJDIR)/%.o) >$@
+
+# Includes all .h files
+-include $(DEP)
+
+# Building rule for .o files and its .c/.cpp in combination with all .h
+$(OBJDIR)/%.o: $(SRCDIR)/%$(EXT)
+	$(CC) $(CXXFLAGS) -o $@ -c $<
+
+################### Cleaning rules for Unix-based OS ###################
+# Cleans complete project
+.PHONY: clean
+clean:
+	$(RM) $(DELOBJ) $(DEP) $(APPNAME)
+
+# Cleans only all files with the extension .d
+.PHONY: cleandep
+cleandep:
+	$(RM) $(DEP)
+
+#################### Cleaning rules for Windows OS #####################
+# Cleans complete project
+.PHONY: cleanw
+cleanw:
+	$(DEL) $(WDELOBJ) $(DEP) $(APPNAME)$(EXE)
+
+# Cleans only all files with the extension .d
+.PHONY: cleandepw
+cleandepw:
+	$(DEL) $(DEP)

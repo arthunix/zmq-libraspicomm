@@ -20,11 +20,11 @@ struct msgStruct {
 int main ()
 {
     //  Prepare our context and socket
-    zmq::context_t context (1);
+    zmq::context_t context(1);
     zmq::socket_t socket(context, zmq::socket_type::req);
 
     std::cout << "Connecting to REP..." << std::endl;
-    socket.connect("tcp://localhost:5559");
+    socket.connect("tcp://localhost:5556");
 
     char buff[5];
     memcpy(buff, "Hello", 5);

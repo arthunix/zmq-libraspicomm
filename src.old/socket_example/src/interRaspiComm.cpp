@@ -8,7 +8,12 @@
 #include "headers/utils.hpp"
 
 
-RaspiComm::RaspiComm(unsigned short endType) {
+zmq::context_t GLOBAL_CONTEXT(1);
+
+
+RaspiComm::RaspiComm(zmq::socket_type endType)
+: this->responder(GLOBAL_CONTEXT, endType)
+{
     this->logger = utils::Logger("RaspiComm", "RaspiComm.log", utils::Logger::Info);
     this->logger.info("RaspiComm Obj Created");
 
@@ -44,8 +49,7 @@ void RaspiComm::initService(const char *endpointIp, unsigned int port) {
 
         // zmq::context_t context(2);
         // this->responder = zmq::socket_t(context, zmq::socket_type::rep);
-        zmq::context_t context(2);
-        this->responder(context, zmq::socket_type::rep);
+        // this->responder(GLOBAL_CONTEXT, zmq::socket_type::rep);
 
         char endpoint[ENDPOINT_STR_MAX_LEN] = {0};
         sprintf(
@@ -62,8 +66,7 @@ void RaspiComm::initService(const char *endpointIp, unsigned int port) {
 
         // zmq::context_t context(1);
         // this->requester = socket(context, zmq::socket_type::req);
-        zmq::context_t context (1);
-        this->requester = zmq::socket_t(context, zmq::socket_type::req);
+        // this->requester = zmq::socket_t(GLOBAL_CONTEXT, zmq::socket_type::req);
 
         char endpoint[ENDPOINT_STR_MAX_LEN] = {0};
         sprintf(
