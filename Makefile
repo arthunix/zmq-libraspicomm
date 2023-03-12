@@ -12,6 +12,7 @@ APPNAME = RaspiComms
 EXT = .cpp
 SRCDIR = src
 OBJDIR = obj
+LIBDIR = lib
 
 ############## Do not change anything from here downwards! #############
 SRC = $(wildcard $(SRCDIR)/*$(EXT))
@@ -29,16 +30,28 @@ WDELOBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)\\%.o)
 ####################### Targets beginning here #########################
 ########################################################################
 
-all: comms_control comms_img
+all: comms_control comms_img libraspicomm
 
 comms_control: $(SRCDIR)/comms_control.cpp
-	$(CPP) $(CXXFLAGS) $(SRCDIR)/comms_control.cpp -o $(OBJDIR)/comms_control.o -c
+	mkdir -p $(OBJDIR)
+	$(CPP) $(CXXFLAGS) $(SRCDIR)/comms_control.cpp -o $(OBJDIR)/comms_control.o
 
 comms_img: $(SRCDIR)/comms_img.cpp
-	$(CPP) $(CXXFLAGS) $(SRCDIR)/comms_img.cpp -o $(OBJDIR)/comms_img.o -c
+	mkdir -p $(OBJDIR)
+	$(CPP) $(CXXFLAGS) $(SRCDIR)/comms_img.cpp -o $(OBJDIR)/comms_img.o
+
+libraspicomm: $(OBJDIR)/comms_img.o $(OBJDIR)/comms_control.o
+	mkdir -p $(LIBDIR)
+	ar -rsv $(LIBDIR)/libraspicomm.a $(OBJDIR)/comms_img.o $(OBJDIR)/comms_control.o
+#	g++ $(CXXFLAGS) $(LDFLAGS) -shared -o $(LIBDIR)/libraspicomm.so $(OBJDIR)/comms_img.o $(OBJDIR)/comms_control.o
 
 install:
+	sudo cp lib/* /usr/local/lib
 	sudo cp src/headers/* /usr/include
+
+clean:
+	rm -rf lib/
+	rm -rf obj/
 
 # # Builds the app
 # $(APPNAME): $(OBJ)
