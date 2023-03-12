@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
-#include "comms_img.hpp"
+#include "headers/comms_img.hpp"
 
 
 int main (int argc, char const *argv[])

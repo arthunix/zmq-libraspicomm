@@ -4,7 +4,7 @@
 
 # Compiler settings - Can be customized.
 CC = g++
-CXXFLAGS = -std=c++17 -Wall -static-libstdc++ -static-libgcc -Wwrite-strings -g -lm -lczmq -lpthread
+CXXFLAGS = -std=c++17 -Wall -static-libstdc++ -static-libgcc -Wwrite-strings -g -lm -lzmq -lpthread
 LDFLAGS = --disable-stdcall-fixup
 
 # Makefile settings - Can be customized.
@@ -29,41 +29,48 @@ WDELOBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)\\%.o)
 ####################### Targets beginning here #########################
 ########################################################################
 
-all: $(APPNAME)
+all: comms_control comms_img
 
-# Builds the app
-$(APPNAME): $(OBJ)
-	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+comms_control: $(SRCDIR)/comms_control.cpp
+	$(CPP) $(CXXFLAGS) $(SRCDIR)/example_img.cpp -o $(OBJDIR)/example_img.o -c
 
-# Creates the dependecy rules
-%.d: $(SRCDIR)/%$(EXT)
-	@$(CPP) $(CFLAGS) $< -MM -MT $(@:%.d=$(OBJDIR)/%.o) >$@
+comms_img: $(SRCDIR)/comms_img.cpp
+	$(CPP) $(CXXFLAGS) $(SRCDIR)/example_control.cpp -o $(OBJDIR)/example_control.o -c
 
-# Includes all .h files
--include $(DEP)
 
-# Building rule for .o files and its .c/.cpp in combination with all .h
-$(OBJDIR)/%.o: $(SRCDIR)/%$(EXT)
-	$(CC) $(CXXFLAGS) -o $@ -c $<
-
-################### Cleaning rules for Unix-based OS ###################
-# Cleans complete project
-.PHONY: clean
-clean:
-	$(RM) $(DELOBJ) $(DEP) $(APPNAME)
-
-# Cleans only all files with the extension .d
-.PHONY: cleandep
-cleandep:
-	$(RM) $(DEP)
-
-#################### Cleaning rules for Windows OS #####################
-# Cleans complete project
-.PHONY: cleanw
-cleanw:
-	$(DEL) $(WDELOBJ) $(DEP) $(APPNAME)$(EXE)
-
-# Cleans only all files with the extension .d
-.PHONY: cleandepw
-cleandepw:
-	$(DEL) $(DEP)
+# # Builds the app
+# $(APPNAME): $(OBJ)
+# 	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+#
+# # Creates the dependecy rules
+# %.d: $(SRCDIR)/%$(EXT)
+# 	@$(CPP) $(CFLAGS) $< -MM -MT $(@:%.d=$(OBJDIR)/%.o) >$@
+#
+# # Includes all .h files
+# -include $(DEP)
+#
+# # Building rule for .o files and its .c/.cpp in combination with all .h
+# $(OBJDIR)/%.o: $(SRCDIR)/%$(EXT)
+# 	$(CC) $(CXXFLAGS) -o $@ -c $<
+#
+# ################### Cleaning rules for Unix-based OS ###################
+# # Cleans complete project
+# .PHONY: clean
+# clean:
+# 	$(RM) $(DELOBJ) $(DEP) $(APPNAME)
+#
+# # Cleans only all files with the extension .d
+# .PHONY: cleandep
+# cleandep:
+# 	$(RM) $(DEP)
+#
+# #################### Cleaning rules for Windows OS #####################
+# # Cleans complete project
+# .PHONY: cleanw
+# cleanw:
+# 	$(DEL) $(WDELOBJ) $(DEP) $(APPNAME)$(EXE)
+#
+# # Cleans only all files with the extension .d
+# .PHONY: cleandepw
+# cleandepw:
+# 	$(DEL) $(DEP)

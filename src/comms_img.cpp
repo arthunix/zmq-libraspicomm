@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <thread>
 
-#include "msg_struct.h"
+#include "headers/msg_struct.h"
 #include "headers/comms_img.hpp"
 
 namespace comms {
