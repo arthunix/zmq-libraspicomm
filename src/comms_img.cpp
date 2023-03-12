@@ -20,7 +20,7 @@ namespace comms {
     zmq::socket_t global_socket(context, zmq::socket_type::rep);
 
     msgStruct *getMsgStructRef() {
-        log("[getMsgStructRef] called");
+        // log("[getMsgStructRef] called");
         return global_bss_struct;
     }
 

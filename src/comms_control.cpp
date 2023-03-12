@@ -20,7 +20,7 @@ namespace comms {
         oss << "tcp://" << ip << ":" << port;
         auto str = oss.str();
 
-        log("[initComms] connection on: %s", str);
+        log("[initComms] connection on: %s", str.c_str());
         global_socket.connect(str.c_str());
         log("[initComms] socket connected");
     }
