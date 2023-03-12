@@ -45,7 +45,7 @@ namespace comms {
 
     template<typename... Args>
     void log(const char* message, Args... args) {
-#ifndef COMMS_LOG
+#ifdef COMMS_LOG
         time_t     now = time(0);
         struct tm  tstruct;
         char       currTime[80] = {0};
@@ -69,7 +69,7 @@ namespace comms {
         fprintf(pFile, ";\n");
         fclose(pFile);
 
-    #ifndef COMMS_DEBUG
+    #ifdef COMMS_DEBUG
             printf(log_init_str.c_str());
             printf(message, args...);
             printf(";\n");
