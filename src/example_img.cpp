@@ -16,6 +16,5 @@ int main (int argc, char const *argv[])
         msg->ang = 5.5;
     }
 
-    // t.join();
     return 0;
 }
