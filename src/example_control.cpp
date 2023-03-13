@@ -4,7 +4,9 @@
 #include <unistd.h>
 #include "headers/comms_control.hpp"
 
-#define COMMS_DEBUG 1
+#define COMMS_DEBUG            1
+#define COMMS_LOG              1
+
 
 int main (int argc, char const *argv[])
 {
