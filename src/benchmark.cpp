@@ -11,9 +11,9 @@
 int main (int argc, char const *argv[])
 {
 
-    int times[RUNS];
+    int times = new int[RUNS];
     comms::initComms("localhost", 5556);
-    for (size_t i = 0; i < RUNS; i++) {
+    for (unsigned long long i = 0; i < RUNS; i++) {
         auto start = std::chrono::high_resolution_clock::now();
             comms::msgStruct msg = comms::getData();
         auto stop = std::chrono::high_resolution_clock::now();
@@ -22,12 +22,13 @@ int main (int argc, char const *argv[])
         times[i] = duration.count();
     }
 
-    long long avg = 0;
-    for (size_t i = 0; i < RUNS; i++)
+    unsigned long long avg = 0;
+    for (unsigned long long i = 0; i < RUNS; i++)
         avg += times[i];
     avg /= RUNS;
 
     std::cout << "AVG TIME (μs): " << avg << '\n';
 
+    delete times;
     return 0;
 }

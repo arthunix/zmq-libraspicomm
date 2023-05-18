@@ -3,7 +3,8 @@
 #include <string.h>
 #include "headers/comms_img.hpp"
 
-#define COMMS_DEBUG 1
+#define COMMS_DEBUG            1
+#define COMMS_LOG              1
 
 int main (int argc, char const *argv[])
 {
@@ -15,6 +16,5 @@ int main (int argc, char const *argv[])
         msg->ang = 5.5;
     }
 
-    // t.join();
     return 0;
 }
